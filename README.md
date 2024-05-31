@@ -24,6 +24,9 @@ Quiz-App is a dynamic mobile application designed to engage both students and in
 5. **Instructor Privileges:**
    - Only instructors can create, edit, and delete questions.
 
+# State Management with Riverpod
+The application leverages Riverpod for state management, ensuring a robust and scalable architecture. Riverpod provides a more modular and testable way to manage state, compared to traditional methods. It helps in maintaining the app's state across different parts of the application, making it easier to manage and debug.
+
 ## Members
 
 | Name                  | ID            |
@@ -32,4 +35,3 @@ Quiz-App is a dynamic mobile application designed to engage both students and in
 | Daniel Asrat          | UGR/4100/14   |
 | Jemil Shikuri         | UGR/4296/14   |
 | Metsnanat Asfaw       | UGR/7631/12   |
-
