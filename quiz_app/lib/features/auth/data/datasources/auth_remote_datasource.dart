@@ -16,8 +16,6 @@ class AuthRemoteDataSource {
 
   Future<Either<Failure, Success>> login(
       String userId, String password, String role) async {
-    try {
-      print('login service called. from auth_remote_datasource.dart');
 
       Response response = await http.post(
         Uri.parse('$baseURL/auth/login'),
@@ -30,7 +28,6 @@ class AuthRemoteDataSource {
           'role': role
         }),
       );
-      print('from remote data source: statusCode = ${response.statusCode}');
       if ((response.statusCode) ~/ 100 == 2) {
         final token = jsonDecode(response.body)['token'];
         print(token);
@@ -46,7 +43,6 @@ class AuthRemoteDataSource {
 
   Future<Either<Failure, Success>> signup(
       String username, String password, String email, String role) async {
-    try {
       Response response = await http.post(
         Uri.parse('$baseURL/users/signup'),
         headers: <String, String>{
@@ -64,9 +60,6 @@ class AuthRemoteDataSource {
       } else {
         return const Left(OperationFailure('Sign Up Not Successful'));
       }
-    } catch (e) {
-      return const Left(OperationFailure('Something Went Wrong.'));
-    }
   }
 
   Future<Either<Failure, Success>> updateUsername(String newUsername) async {
