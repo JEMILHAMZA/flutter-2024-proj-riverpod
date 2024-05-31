@@ -29,7 +29,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     final result = await login(
         LoginParams(userId: userId, password: password, role: role));
     result.fold(
-      (failure) => state = const AuthState.failure('Login failed'),
+      (failure) => state = const AuthState.failure(failure.message),
       (success) => state = const AuthState.success('Login successful'),
     );
   }
@@ -40,7 +40,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     final result = await signUp(SignupParams(
         username: username, password: password, email: email, role: role));
     result.fold(
-      (failure) => state = const AuthState.failure('Sign Up Failed'),
+      (failure) => state = const AuthState.failure(failure.message),
       (success) => state = const AuthState.success('Sign Up Successful'),
     );
   }
@@ -65,7 +65,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = const AuthState.loading();
     final result = await updateUsername(newUsername);
     result.fold(
-      (failure) => state = const AuthState.failure('Update Unsuccessful'),
+      (failure) => state = const AuthState.failure(failure.message),
       (success) => state = const AuthState.success('Update Successful'),
     );
   }
@@ -74,7 +74,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = const AuthState.loading();
     final result = await deleteUser();
     result.fold(
-      (failure) => state = const AuthState.failure('Request Unsuccessful'),
+      (failure) => state = const AuthState.failure(failure.message),
       (success) =>
           state = const AuthState.success('We\'re sorry to see you go'),
     );
