@@ -136,9 +136,13 @@ Future<void> main() async {
     );
   });
 
-  //router setup
+
+// Initialize the GoRouter for managing app routes
+  
   final GoRouter router = GoRouter(
+   // Set the initial location based on token validity
     initialLocation: await hasValidToken(sharedPreferences) ? '/settings' : '/',
+     // Define the available routes and their corresponding builders
     routes: [
       GoRoute(path: '/', builder: (context, state) => const Home()),
       GoRoute(path: '/signup', builder: (context, state) => const SignUpPage()),
@@ -153,6 +157,7 @@ Future<void> main() async {
       GoRoute(
         path: '/question_form',
         builder: (context, state) {
+          // Extract additional data from the route state
           final extra = state.extra as Map<String, dynamic>?;
           return QuestionForm(
             question: extra?['question'] as Question?,
@@ -167,10 +172,12 @@ Future<void> main() async {
     ],
   );
 
+  // Initialize the app with providers and router configuration
   runApp(
     ProviderScope(
       child: MultiBlocProvider(
         providers: [
+           // Authentication Bloc
           BlocProvider<AuthBloc>(
             create: (BuildContext context) => AuthBloc(
                 login: login,
@@ -180,6 +187,7 @@ Future<void> main() async {
                 updateUsername: updateUsername,
                 deleteUser: deleteUser),
           ),
+            // Question Bloc
           BlocProvider<QuestionBloc>(
             create: (BuildContext context) => QuestionBloc(
                 createQuestion: createQuestion,
@@ -187,6 +195,7 @@ Future<void> main() async {
                 fetchQuestions: fetchQuestions,
                 updateQuestion: updateQuestion),
           ),
+            // Note Bloc
           BlocProvider<NoteBloc>(
             create: (BuildContext context) => NoteBloc(
                 createNote: createNote,
@@ -204,6 +213,7 @@ Future<void> main() async {
   );
 }
 
+// Represents the home screen of the QuizApp
 class Home extends StatelessWidget {
   const Home({super.key});
 
@@ -218,6 +228,7 @@ class Home extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
+                  // Welcome text
                   'Welcome To',
                   style: TextStyle(fontSize: 42, color: Color(0xFF4280EF)),
                 ),
@@ -228,12 +239,14 @@ class Home extends StatelessWidget {
                 const Text(
                   'Let\'s get started',
                 ),
+                  // Our Large 'Q' logo
                 const Center(
                   child: Text(
                     'Q',
                     style: TextStyle(fontSize: 200, color: Color(0xFF4280EF)),
                   ),
                 ),
+                 // Sign-in button
                 Row(
                   children: [
                     Expanded(
@@ -264,6 +277,7 @@ class Home extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
+                 // Sign-up link
                 Row(
                   children: [
                     const Text('New to QuizApp'),
@@ -285,7 +299,7 @@ class Home extends StatelessWidget {
     );
   }
 }
-
+// Checks if the stored token is valid
 Future<bool> hasValidToken(SharedPreferences prefs) async {
   String? token = prefs.getString('TOKEN');
 
