@@ -8,6 +8,7 @@ import 'package:quiz_app/features/questions/presentation/bloc/question_bloc.dart
 import 'package:quiz_app/features/questions/presentation/bloc/question_event.dart';
 import 'package:quiz_app/features/questions/presentation/bloc/question_state.dart';
 
+// InstructorScreen widget for displaying and managing questions
 class InstructorScreen extends StatefulWidget {
   const InstructorScreen({super.key});
 
@@ -22,9 +23,11 @@ class _InstructorScreenState extends State<InstructorScreen> {
   @override
   void initState() {
     super.initState();
+    // Fetch questions when the screen is initialized
     BlocProvider.of<QuestionBloc>(context).add(FetchQuestionsEvent());
   }
 
+  // Handle option selection for a question
   void _handleOptionSelected(int questionIndex, int optionIndex) {
     setState(() {
       selectedOptionIndices[questionIndex] = optionIndex;
@@ -42,22 +45,26 @@ class _InstructorScreenState extends State<InstructorScreen> {
         ),
         body: BlocConsumer<QuestionBloc, QuestionState>(
           listener: (context, state) {
+            // Display a SnackBar for success or error messages
             if (state is QuestionSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Center(child: Text(state.message))));
+                SnackBar(content: Center(child: Text(state.message))),
+              );
               BlocProvider.of<QuestionBloc>(context).add(FetchQuestionsEvent());
             } else if (state is QuestionError) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Center(
-                child: Text(state.message),
-              )));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Center(child: Text(state.message))),
+              );
               BlocProvider.of<QuestionBloc>(context).add(FetchQuestionsEvent());
             }
           },
           builder: (context, state) {
+            // Show a loading indicator while fetching questions
             if (state is QuestionLoading) {
               return Center(child: CircularProgressIndicator());
-            } else if (state is QuestionLoaded && state.questions.isNotEmpty) {
+            }
+            // Display the questions when they are loaded
+            else if (state is QuestionLoaded && state.questions.isNotEmpty) {
               final questions = state.questions;
 
               if (selectedOptionIndices.isEmpty) {
@@ -87,6 +94,7 @@ class _InstructorScreenState extends State<InstructorScreen> {
                               IconButton(
                                 icon: Icon(Icons.edit),
                                 onPressed: () {
+                                  // Navigate to the question form for editing
                                   context.go('/question_form', extra: {
                                     'question': question,
                                     'edit': true
@@ -97,6 +105,7 @@ class _InstructorScreenState extends State<InstructorScreen> {
                                 icon: Icon(Icons.delete),
                                 onPressed: () {
                                   print('this will delete the question');
+                                  // Trigger question deletion
                                   BlocProvider.of<QuestionBloc>(context)
                                       .add(DeleteQuestionEvent(question));
                                 },
@@ -130,6 +139,7 @@ class _InstructorScreenState extends State<InstructorScreen> {
                             }).toList(),
                           ),
                           const SizedBox(height: 20),
+                          // Show the explanation if an option has been selected
                           if (showExplanations[index])
                             Container(
                               padding: const EdgeInsets.all(10),
@@ -148,12 +158,15 @@ class _InstructorScreenState extends State<InstructorScreen> {
                   },
                 ),
               );
-            } else if (state is QuestionFetchError) {
+            }
+            // Show an error message if fetching questions failed
+            else if (state is QuestionFetchError) {
               return Center(child: Text(state.message));
             }
             return Center(child: Text('No Questions Available'));
           },
         ),
+        // Bottom navigation bar for navigation to other screens
         bottomNavigationBar: NavigationBar(
           onDestinationSelected: (int index) {
             if (index == 0) {
@@ -191,6 +204,7 @@ class _InstructorScreenState extends State<InstructorScreen> {
   }
 }
 
+// Custom button widget for displaying question options
 class OptionButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String title;
@@ -207,6 +221,7 @@ class OptionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Set the background color based on selection and correctness
     Color backgroundColor = Colors.white;
     if (isSelected) {
       backgroundColor = isCorrect == true ? Colors.green : Colors.red;
