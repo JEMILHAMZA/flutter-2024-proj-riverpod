@@ -32,6 +32,7 @@
 // }
 
 //note data sources
+// import all important packages
 import 'package:quiz_app/core/utils/utility_objects.dart';
 import 'package:quiz_app/features/notes/data/datasources/note_local_datasource.dart';
 import 'package:quiz_app/features/notes/data/datasources/note_remote_datasource.dart';
@@ -44,21 +45,25 @@ import 'package:quiz_app/features/notes/presentation/bloc/note_state.dart';
 import 'package:quiz_app/features/notes/presentation/note_riverpod/note_notifier.dart';
 import 'package:riverpod/riverpod.dart';
 
+//Initializes necessary dependencies for managing notes
 void init() {
+  // Initialize local and remote data sources
   final noteLocalDatasource = NoteLocalDatasource();
   final noteRemoteDatasource = NoteRemoteDatasource(
       baseURL: 'baseUrl', localDataSource: LocalDataSource);
+  // Create a repository for note-related operations
   final noteRepository = NoteRepositoryImpl(
       noteLocalDatasource: noteLocalDatasource,
       noteRemoteDatasource: noteRemoteDatasource);
-
+// Define use cases for note operation
   //note usecases
   final createNote = CreateNote(noteRepository);
   final deleteNote = DeleteNote(noteRepository);
   final getNote = GetNote(noteRepository);
   final updateNote = UpdateNote(noteRepository);
 
-  //define note providers
+  
+  // Define providers for the specific dependency injection.
   final createNoteProvider = Provider<CreateNote>((ref) {
     return createNote;
   });
