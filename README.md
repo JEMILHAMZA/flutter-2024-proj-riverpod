@@ -1,4 +1,4 @@
-# Quiz-App
+# Quiz-App|under development
 
 Quiz-App is a dynamic mobile application designed to engage both students and instructors through interactive quizzes and note-taking functionalities. The app features role-based access control, allowing instructors to create, edit, and delete questions while students can answer questions, receive instant feedback, and manage their personal notes.
 
